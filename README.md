@@ -1,2 +1,2 @@
 # Linear
-An easy application to solve linear equations from excel files
+An straightforward application to solve linear equations using Scikit-learn linear regression models.
