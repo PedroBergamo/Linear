@@ -62,7 +62,6 @@ class OLSUnitTests(unittest.TestCase):
         OLS.CalculateAICs()
         Actual = OLS.LowestDependentVariables[0]
         Expected = 'x'
-        #Actual = NewOLS.LowestDependentVariables[0]
         self.assertEqual(Actual, Expected)
 
 if __name__ == '__main__':

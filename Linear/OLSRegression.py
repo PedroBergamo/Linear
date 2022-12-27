@@ -11,13 +11,12 @@ import os
 class OLSRegression:
     Regression = linear_model.LinearRegression()
 
-    def __init__(self, DataFileName = 'TestData.csv', IndependentVariablesList = ['y'], DependentVariablesList = ['x', 'x2']):
+    def __init__(self, DataFileName, IndependentVariablesList, DependentVariablesList):
         self.Data = DataSet(DataFileName)
         self.TrainingData = self.Data.TrainingData()
         self.TestingData = self.Data.TestingData()
         self.DependentVariablesList = DependentVariablesList
         self.IndependentVariablesList = IndependentVariablesList
-        self.LowestDependentVariables = []
         self.AICs = []
         self.IteractionsNumber = 100
 
@@ -26,28 +25,16 @@ class OLSRegression:
         for IndependentVariable in self.IndependentVariablesList:
             self.IndependentVariable = IndependentVariable
             self.FindBestFit()
-            print(self.LogMessage())
             self.PlotAICs()
 
     def FindBestFit(self):
         AICResetingFactor = 10e10
         self.LowestAIC = AICResetingFactor
-        #self.IteractionsNumber = len(self.DependentVariablesList)
-        #for i in range(self.IteractionsNumber):
-        self.FindLowestAIC()
-
-    def FindLowestAIC(self):
-        #import random
-        #random.shuffle(self.DependentVariablesList)
         self.BuildDataSet()
-        #self.RemoveLowWeightVariables()
+
 
     def BuildDataSet(self):
-        #i=1
         self.SortedVariables = self.SortedDependentVariables()
-
-        print("sorted variables")
-        print(self.SortedVariables)
         self.DependentVariables = []
         for var in self.SortedVariables:
             self.DependentVariables.append(var)
@@ -62,23 +49,13 @@ class OLSRegression:
 
     def SetUpLowestAIC(self):
         self.TrainTheModel()
+        self.AICsCalculated+=1
         if(self.AIC() < self.LowestAIC):
             self.LowestAIC = self.AIC()
-            self.LowestDependentVariables = self.DependentVariables
-            print(self.LowestAIC)
-            print("Variables for LowestAIC")
-            print(self.LowestDependentVariables)
-        self.AICs.append(self.LowestAIC)
-        #self.SaveResults()
-        self.AICsCalculated+=1
+            print(self.LogMessage())
+            self.SaveResults()
 
-    def RemoveLowWeightVariables(self):
-        for coefficient in self.Regression.coef_:
-            RemovalFactor = 0.001
-            i = 0
-            if (coefficient < RemovalFactor):
-                self.DependentVariables.remove(self.DependentVariables[i])
-                i+=1
+        self.AICs.append(self.AIC())
 
     def PlotAICs(self):
         Index = range(len(self.AICs))
@@ -88,7 +65,7 @@ class OLSRegression:
         SubImage.plot(Index, self.AICs, color='blue', label='$y = AICs' )
         FigureName = ' AICs plot '
         plt.title(FigureName)
-        Figure.savefig( FigureName + '.png')
+        Figure.savefig( self.LogFolderName + FigureName + '.png')
 
     def AIC(self):
         residuals = self.ModelFit() - self.TestingData[self.IndependentVariable]
@@ -129,12 +106,14 @@ class OLSRegression:
 
     def LogMessage(self):
         import datetime
-        Log = '\n' + str(datetime.datetime.now())
-        Log += '\nLowest AIC for: ' + str(self.IndependentVariable) + ' ' + str(self.AIC()) + '\nFound using: ' + str(self.LowestDependentVariables)
+        Log = '\nIteration: ' + str(self.AICsCalculated)
+        Log += '\n' + str(datetime.datetime.now())
+        Log += '\nLowest AIC found for ' + str(self.IndependentVariable) + ' :' + str(
+            self.AIC()) + '\nFound using: ' + str(self.DependentVariables)
         Log +=  '\n' + str(self.Regression.intercept_) + str(self.Regression.coef_)
         Log += '\nMSE :' + str(mean_squared_error(self.TestingData[self.IndependentVariable], self.ModelFit()))
         Log += '\nAIC: ' + str(self.AIC())
-        Log += '\nNumber of interactions: ' + str(self.AICsCalculated)
+        Log += '\nAICc: ' + str(self.AICc())
         return Log
 
     def WriteResults(self):
