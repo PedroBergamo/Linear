@@ -21,9 +21,9 @@ Take the provided data set (TestData.csv) as an example. Imagine the extreme sce
 
 $ from OLSRegression import *
 $ OLSRegression('TestData.csv', ['x'], ['x2', 'x3','o','z','x']).CalculateAICs()
-
-The software would find the AIC for a varied set of combinations of those dependent variables but it would eventually tell you that 'x' is the simplest best predictor for 'x'. 
 ```
+The software would find the AIC for a varied set of combinations of those dependent variables but it would eventually tell you that 'x' is the simplest best predictor for 'x'. 
+
 
 ## Bibliography
 
