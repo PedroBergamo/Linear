@@ -1,16 +1,12 @@
-<div align="center">
-  <img src="./Linear/Resources/logo-square.png" width="200" height="200"/>
-</div>
-
 <div id="badges" align="center">
   <a href="https://www.linkedin.com/in/pedrobergamo/">
     <img src="https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Badge"/>
   </a>
 </div>
 
-# Linear
+# Akaike
 
-Linear is a tool which allows you to find which combination of parameters gives the best fit in a linear regression according to AIC (Akaike Information Criterion).
+Akaike is an algorithm which allows you to find which combination of parameters gives the best fit in a linear regression according to AIC (Akaike Information Criterion).
 
 ## About
 
